@@ -6,7 +6,7 @@
 
 ## Files 
 - **README.md:** The READ ME file will contain the information needed to function and understand this project. 
-- **Filename 1:** Enter explaination
+- **cooler.ino:** Enter explaination
 - **Filename 2:** Enter explaination
 - **Filename 3:** Enter explaination
 
