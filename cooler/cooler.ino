@@ -30,6 +30,12 @@ void setup() {
   for (int i = 13; i >= 10; i--) {
     pinMode(i, OUTPUT);
   }
+
+  pinMode(START, INPUT_PULLUP);
+  pinMode(RESET, INPUT_PULLUP);
+
+  attachInterrupt(digitalPinToInterrupt(START), startSystem, FALLING);
+  attachInterrupt(digitalPinToInterrupt(RESET), resetError, FALLING);
 }
 
 void loop() {
