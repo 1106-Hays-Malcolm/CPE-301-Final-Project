@@ -3,6 +3,8 @@
 #define YELLOW_LED 13
 #define BLUE_LED 11
 #define RED_LED 10
+#define START 2
+#define RESET 3
 
 char state, previousState;
 
@@ -14,6 +16,12 @@ void leds_off() {
   }
 }
 
+void startSystem() {
+  if (state == 'd') { 
+    state = 'i';
+  }
+}
+
 void setup() {
   state = 'd';
   previousState = '';
@@ -22,7 +30,6 @@ void setup() {
   for (int i = 13; i >= 10; i--) {
     pinMode(i, OUTPUT);
   }
-
 }
 
 void loop() {
