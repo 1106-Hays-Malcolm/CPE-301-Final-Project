@@ -64,7 +64,8 @@ void setup() {
 void loop() {
   
   // Test code //
-  Serial.println(analogRead(WATER_SENSOR_PIN));
+  int testValue = analogRead(WATER_SENSOR_PIN);
+  Serial.println(testValue);
   // Test code //
 
 
