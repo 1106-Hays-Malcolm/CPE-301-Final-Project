@@ -4,7 +4,8 @@
 #define BLUE_LED 11
 #define RED_LED 10
 
-char state, previousState;
+volatile char state;
+char previousState;
 
 int greenLED, redLED, blueLED, yellowLED;
 
