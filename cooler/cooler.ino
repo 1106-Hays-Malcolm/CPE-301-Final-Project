@@ -6,7 +6,8 @@
 #define START 2
 #define RESET 3
 
-char state, previousState;
+volatile char state;
+char previousState;
 
 int greenLED, redLED, blueLED, yellowLED;
 
