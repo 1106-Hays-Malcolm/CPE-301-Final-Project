@@ -49,7 +49,7 @@ void setup() {
   pinMode(RESET, INPUT_PULLUP);
   pinMode(STOP, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(RESET), reset_buttor_ISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(RESET), reset_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
 }
