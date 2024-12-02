@@ -1,4 +1,4 @@
-
+#include <DHT.h>
 #define GREEN_LED 12
 #define YELLOW_LED 13
 #define BLUE_LED 11
@@ -9,6 +9,7 @@
 #define DHTPIN 4 //water + hum sensor
 #define LOWTEMP 20
 #define HIGHTEMP 30
+
 
 
 volatile char state;
