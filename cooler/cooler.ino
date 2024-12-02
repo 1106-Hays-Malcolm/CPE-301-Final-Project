@@ -6,6 +6,7 @@
 #define START 2
 #define RESET 3
 #define STOP 18
+#define WATER_SENSOR_PIN A0
 
 volatile char state;
 char previousState;
@@ -37,6 +38,10 @@ void startSystem() {
 }
 
 void setup() {
+
+  Serial.begin(9600);
+
+
   state = 'd';
   previousState = ' ';
 
@@ -52,10 +57,17 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(RESET), reset_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
+
+  pinMode(WATER_SENSOR_PIN, INPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
+  // Test code //
+  Serial.println(analogRead(WATER_SENSOR_PIN));
+  // Test code //
+
+
   if (previousState != state) {
     leds_off();
     previousState = state;
