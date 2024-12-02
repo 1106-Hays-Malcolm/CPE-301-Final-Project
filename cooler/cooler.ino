@@ -34,9 +34,9 @@ void setup() {
     pinMode(i, OUTPUT);
   }
 
-  pinMode(START, INPUT);
+  pinMode(START, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, RISING);
+  attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
 }
 
 void loop() {
