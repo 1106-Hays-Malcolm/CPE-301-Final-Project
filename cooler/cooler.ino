@@ -9,6 +9,10 @@
 volatile char state;
 char previousState;
 
+void start_button_ISR() {
+  state = 'i';
+}
+
 void leds_off() {
   for (int i = 13; i >= 10; i--) {
     digitalWrite(i, LOW);
@@ -23,12 +27,16 @@ void startSystem() {
 
 void setup() {
   state = 'd';
-  previousState = '';
+  previousState = ' ';
 
   // put your setup code here, to run once:
   for (int i = 13; i >= 10; i--) {
     pinMode(i, OUTPUT);
   }
+
+  pinMode(START, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, RISING);
 }
 
 void loop() {
