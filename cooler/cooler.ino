@@ -9,8 +9,6 @@
 volatile char state;
 char previousState;
 
-int greenLED, redLED, blueLED, yellowLED;
-
 void leds_off() {
   for (int i = 13; i >= 10; i--) {
     digitalWrite(i, LOW);
