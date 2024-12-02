@@ -14,6 +14,12 @@ void start_button_ISR() {
   state = 'i';
 }
 
+void reset_button_ISR() {
+  if (state == 'e') {
+    state = 'i';
+  }
+}
+
 void stop_button_ISR() {
   state = 'd';
 }
