@@ -9,7 +9,7 @@
 #define DHTPIN A1 //water + hum sensor
 #define LOWTEMP 20
 #define HIGHTEMP 30
-
+#define WATER_SENSOR_PIN A0
 
 
 volatile char state;
@@ -45,6 +45,7 @@ void startSystem() {
 }
 
 void setup() {
+
   Serial.begin(9600);
 
   state = 'd';
@@ -64,10 +65,17 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
 
   pinMode(DHTPIN, INPUT);
+  pinMode(WATER_SENSOR_PIN, INPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
+  // Test code //
+  int testValue = analogRead(WATER_SENSOR_PIN);
+  Serial.println(testValue);
+  // Test code //
+
+
   if (previousState != state) {
     leds_off();
     previousState = state;
