@@ -5,12 +5,17 @@
 #define RED_LED 10
 #define START 2
 #define RESET 3
+#define STOP 18
 
 volatile char state;
 char previousState;
 
 void start_button_ISR() {
   state = 'i';
+}
+
+void stop_button_ISR() {
+  state = 'd';
 }
 
 void leds_off() {
@@ -36,9 +41,11 @@ void setup() {
 
   pinMode(START, INPUT_PULLUP);
   pinMode(RESET, INPUT_PULLUP);
+  pinMode(STOP, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(RESET), reset_buttor_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
 }
 
 void loop() {
