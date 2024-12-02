@@ -6,9 +6,14 @@
 #define START 2
 #define RESET 3
 #define STOP 18
+#define DHTPIN 4 //water + hum sensor
+#define LOWTEMP 20
+#define HIGHTEMP 30
+
 
 volatile char state;
 char previousState;
+DHT dht(DHTPIN, DHTTYPE);
 
 void start_button_ISR() {
   state = 'i';
@@ -76,5 +81,27 @@ void loop() {
     }
   }
 
+  if (state != 'd') {  
+    float temperature = dht.readTemperature();  // this should be in celsius
+    float humidity = dht.readHumidity();  // this reads humidity
+    if (isnan(temperature) || isnan(humidity)) {
+      Serial.println("dht is not reading right ");
+      return;
+
+     // https://www.circuitbasics.com/how-to-set-up-the-dht11-humidity-sensor-on-an-arduino/
+    }
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.println("°C");
+
+    Serial.print("Humidity: ");
+    Serial.print(humidity);
+    Serial.println("%");
+
+    if (state == 'r' && temperature < LOWTEMP) {
+      state = 'i'; 
+    } else if (state == 'i' && temperature > HIGHTEMP) {
+      state = 'r';
+    }
 
 }
