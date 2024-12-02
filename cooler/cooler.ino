@@ -89,6 +89,8 @@ void loop() {
   }
 
   if (state != 'd') {  
+    int chk = DHT.read11(DHTPIN);
+
     float temperature = DHT.temperature;  // this should be in celsius
     float humidity = DHT.humidity;  // this reads humidity
     if (isnan(temperature) || isnan(humidity)) {
