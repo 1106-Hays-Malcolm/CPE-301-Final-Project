@@ -1,4 +1,4 @@
-#include <DHT.h>
+#include <dht.h>
 #define GREEN_LED 12
 #define YELLOW_LED 13
 #define BLUE_LED 11
@@ -6,7 +6,7 @@
 #define START 2
 #define RESET 3
 #define STOP 18
-#define DHTPIN 4 //water + hum sensor
+#define DHTPIN A1 //water + hum sensor
 #define LOWTEMP 20
 #define HIGHTEMP 30
 
@@ -14,8 +14,10 @@
 
 volatile char state;
 char previousState;
-DHT dht(DHTPIN, DHTTYPE);
 
+dht DHT;
+// DHT dhDHTPIN, DHTTYPE;
+// dht dhDHTPIN, DHTTYPE;
 void start_button_ISR() {
   state = 'i';
 }
@@ -43,6 +45,8 @@ void startSystem() {
 }
 
 void setup() {
+  Serial.begin(9600);
+
   state = 'd';
   previousState = ' ';
 
@@ -58,6 +62,8 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(RESET), reset_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
+
+  pinMode(DHTPIN, INPUT);
 }
 
 void loop() {
@@ -83,8 +89,8 @@ void loop() {
   }
 
   if (state != 'd') {  
-    float temperature = dht.readTemperature();  // this should be in celsius
-    float humidity = dht.readHumidity();  // this reads humidity
+    float temperature = DHT.temperature;  // this should be in celsius
+    float humidity = DHT.humidity;  // this reads humidity
     if (isnan(temperature) || isnan(humidity)) {
       Serial.println("dht is not reading right ");
       return;
@@ -105,4 +111,5 @@ void loop() {
       state = 'r';
     }
 
+  }
 }
