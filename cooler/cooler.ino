@@ -12,23 +12,22 @@
 #define LOWTEMP 20
 #define HIGHTEMP 30
 #define WATER_SENSOR_PIN A0
-#define RS 8
+#define RS 23
 #define EN 13
 #define D4 4
 #define D5 5
 #define D6 6
-#define D7 7
+#define D7 25
 #define STEPPER_1N1 9
 #define STEPPER_1N2 10
 #define STEPPER_1N3 11
 #define STEPPER_1N4 12
+#define ENA_PIN 8  //  motor speed (PWM control)   all of this are form the link from modules
+#define IN1_PIN 53  // direction 1
+#define IN2_PIN 52  //  direction 2
 
 const int stepsPerRevolution = 2038;
 Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N3, STEPPER_1N2, STEPPER_1N4);
-
-#define ENA_PIN 9  //  motor speed (PWM control)   all of this are form the link from modules
-#define IN1_PIN 6  // direction 1
-#define IN2_PIN 5  //  direction 2
 
 
 volatile char state;
@@ -111,8 +110,10 @@ void setup() {
   lcd.print("Cooling System");
 
   // Test Code //
-  stepper.setSpeed(10);
-  stepper.step(stepsPerRevolution);
+  // stepper.setSpeed(10);
+  // stepper.step(stepsPerRevolution);
+
+  motorStart(254);
   // Test Code //
 
 }
