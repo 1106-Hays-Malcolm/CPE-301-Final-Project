@@ -18,6 +18,11 @@
 #define D6 6
 #define D7 7
 
+#define ENA_PIN 9  //  motor speed (PWM control)   all of this are form the link from modules
+#define IN1_PIN 6  // direction 1
+#define IN2_PIN 5  //  direction 2
+
+
 volatile char state;
 char previousState;
 
@@ -28,6 +33,16 @@ dht DHT;
 // dht dhDHTPIN, DHTTYPE;
 void start_button_ISR() {
   state = 'i';
+}
+
+void motorStart(int speed) {
+  digitalWrite(IN1_PIN, HIGH);  
+  digitalWrite(IN2_PIN, LOW);   
+  analogWrite(ENA_PIN, speed);  
+}
+
+void motorStop() {
+  analogWrite(ENA_PIN, 0);  // stop 
 }
 
 void reset_button_ISR() {
@@ -74,6 +89,10 @@ void setup() {
 
   pinMode(DHTPIN, INPUT);
   pinMode(WATER_SENSOR_PIN, INPUT);
+  
+  pinMode(ENA_PIN, OUTPUT);
+  pinMode(IN1_PIN, OUTPUT);
+  pinMode(IN2_PIN, OUTPUT);
 
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
@@ -115,6 +134,7 @@ void loop() {
 
     float temperature = DHT.temperature;  // this should be in celsius
     float humidity = DHT.humidity;  // this reads humidity
+    
     if (isnan(temperature) || isnan(humidity)) {
       Serial.println("dht is not reading right ");
       return;
