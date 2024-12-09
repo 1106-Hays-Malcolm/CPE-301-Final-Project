@@ -1,9 +1,10 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
-#define GREEN_LED 12
-#define YELLOW_LED 13
-#define BLUE_LED 11
-#define RED_LED 10
+#include <Stepper.h>
+#define GREEN_LED 24
+#define YELLOW_LED 22
+#define BLUE_LED 26
+#define RED_LED 28
 #define START 2
 #define RESET 3
 #define STOP 18
@@ -12,11 +13,18 @@
 #define HIGHTEMP 30
 #define WATER_SENSOR_PIN A0
 #define RS 8
-#define EN 9
+#define EN 13
 #define D4 4
 #define D5 5
 #define D6 6
 #define D7 7
+#define STEPPER_1N1 9
+#define STEPPER_1N2 10
+#define STEPPER_1N3 11
+#define STEPPER_1N4 12
+
+const int stepsPerRevolution = 2038;
+Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N3, STEPPER_1N2, STEPPER_1N4);
 
 #define ENA_PIN 9  //  motor speed (PWM control)   all of this are form the link from modules
 #define IN1_PIN 6  // direction 1
@@ -56,9 +64,10 @@ void stop_button_ISR() {
 }
 
 void leds_off() {
-  for (int i = 13; i >= 10; i--) {
-    digitalWrite(i, LOW);
-  }
+  digitalWrite(GREEN_LED, LOW);
+  digitalWrite(YELLOW_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  digitalWrite(BLUE_LED, LOW);
 }
 
 void startSystem() {
@@ -75,9 +84,10 @@ void setup() {
   previousState = ' ';
 
   // put your setup code here, to run once:
-  for (int i = 13; i >= 10; i--) {
-    pinMode(i, OUTPUT);
-  }
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+  pinMode(YELLOW_LED, OUTPUT);
+  pinMode(BLUE_LED, OUTPUT);
 
   pinMode(START, INPUT_PULLUP);
   pinMode(RESET, INPUT_PULLUP);
@@ -99,6 +109,12 @@ void setup() {
   lcd.print("Evaporation");
   lcd.setCursor(0, 1);
   lcd.print("Cooling System");
+
+  // Test Code //
+  stepper.setSpeed(10);
+  stepper.step(stepsPerRevolution);
+  // Test Code //
+
 }
 
 void loop() {
@@ -155,12 +171,12 @@ void loop() {
       state = 'r';
     }
 
-    lcd.setCursor(0, 0);
+    /*lcd.setCursor(0, 0);
     lcd.print("Temperature: ");
     lcd.print(temperature);
     
     lcd.setCursor(0, 1);
     lcd.print("Humidity: ");
-    lcd.print(humidity);
+    lcd.print(humidity);*/
   }
 }
