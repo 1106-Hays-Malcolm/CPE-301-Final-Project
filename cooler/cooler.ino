@@ -1,5 +1,6 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
+#include <Stepper.h>
 #define GREEN_LED 12
 #define YELLOW_LED 13
 #define BLUE_LED 11
@@ -17,6 +18,13 @@
 #define D5 5
 #define D6 6
 #define D7 7
+#define STEPPER_1N1 37
+#define STEPPER_1N2 35
+#define STEPPER_1N3 33
+#define STEPPER_1N4 31
+
+const int stepsPerRevolution = 2038;
+Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N2, STEPPER_1N3, STEPPER_1N4);
 
 volatile char state;
 char previousState;
@@ -80,9 +88,15 @@ void setup() {
   lcd.print("Evaporation");
   lcd.setCursor(0, 1);
   lcd.print("Cooling System");
+
 }
 
 void loop() {
+
+  // Test Code //
+  stepper.setSpeed(10);
+  stepper.step(100);
+  // Test Code //
   
   // Test code //
   int testValue = analogRead(WATER_SENSOR_PIN);
@@ -135,12 +149,12 @@ void loop() {
       state = 'r';
     }
 
-    lcd.setCursor(0, 0);
+    /*lcd.setCursor(0, 0);
     lcd.print("Temperature: ");
     lcd.print(temperature);
     
     lcd.setCursor(0, 1);
     lcd.print("Humidity: ");
-    lcd.print(humidity);
+    lcd.print(humidity);*/
   }
 }
