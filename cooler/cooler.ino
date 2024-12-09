@@ -1,4 +1,5 @@
 #include <dht.h>
+#include <LiquidCrystal.h>
 #define GREEN_LED 12
 #define YELLOW_LED 13
 #define BLUE_LED 11
@@ -10,10 +11,17 @@
 #define LOWTEMP 20
 #define HIGHTEMP 30
 #define WATER_SENSOR_PIN A0
-
+#define RS 8
+#define EN 9
+#define D4 4
+#define D5 5
+#define D6 6
+#define D7 7
 
 volatile char state;
 char previousState;
+
+LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 dht DHT;
 // DHT dhDHTPIN, DHTTYPE;
@@ -66,6 +74,12 @@ void setup() {
 
   pinMode(DHTPIN, INPUT);
   pinMode(WATER_SENSOR_PIN, INPUT);
+
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Evaporation");
+  lcd.setCursor(0, 1);
+  lcd.print("Cooling System");
 }
 
 void loop() {
@@ -121,5 +135,12 @@ void loop() {
       state = 'r';
     }
 
+    lcd.setCursor(0, 0);
+    lcd.print("Temperature: ");
+    lcd.print(temperature);
+    
+    lcd.setCursor(0, 1);
+    lcd.print("Humidity: ");
+    lcd.print(humidity);
   }
 }
