@@ -79,6 +79,44 @@ void startSystem() {
   }
 }
 
+unsigned ddr_pin_numbers = [13, 12, 11, 10];
+ddrb_addresses = [];
+
+unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
+  switch (pinNumber) {
+
+    // DDRB
+    case 13:
+    case 12:
+    case 11:
+    case 10:
+      return 0x24;
+    
+    // DDRH
+    case 9:
+    case 8:
+    case 7:
+    case 6:
+      return 0x101;
+    
+    // DDRE
+    case 5:
+    case 3:
+    case 2:
+    case 1:
+    case 0:
+      return 0x2D;
+
+    // DDRG
+
+
+  }
+}
+
+void myPinMode(unsigned pinNumber, unsigned mode) {
+
+}
+
 void setup() {
 
   Serial.begin(9600);
