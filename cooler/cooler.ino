@@ -46,7 +46,6 @@ void myDigitalWrite(uint8_t pin, bool value) {
   volatile uint8_t* port;
   uint8_t bit;
 
-
 if (pin == 0) {                // Pin D0
     port = &PORTE;
     bit = 0;                   // PE0
@@ -71,9 +70,8 @@ if (pin == 0) {                // Pin D0
 } else if (pin == 7) {         // Pin D7
     port = &PORTH;
     bit = 4;                   // PH4
-}
 
-  } else if (pin == 8) {              // Pin D8 (PORTH)
+}else if (pin == 8) {              // Pin D8 (PORTH)
     port = &PORTH;
     bit = 5; // PH5
 
@@ -87,10 +85,7 @@ if (pin == 0) {                // Pin D0
     port = &PORTB;
     bit = pin - 6; // PB4–PB7
 
-
-
-
-if (pin == 14) {                // D14/TX3
+}else if (pin == 14) {                // D14/TX3
     port = &PORTJ;
     bit = 1;                    // PJ1
 
@@ -128,15 +123,13 @@ if (pin == 14) {                // D14/TX3
 } else if (pin == 21) {         // D21/SCL
     port = &PORTD;
     bit = 0;                    // PD0
-}
 
-
-  } else if (pin >= 22 && pin <= 29) { // Pins 22–29 (PORTA)
+}else if (pin >= 22 && pin <= 29) { // Pins 22–29 (PORTA)
     port = &PORTA;
     bit = pin - 22; // PA0–PA7
 
 
-if (pin == 30) {                // Pin D30
+}else if (pin == 30) {                // Pin D30
     port = &PORTC;
     bit = 7;                    // PC7
 
