@@ -27,6 +27,13 @@
 #define IN1_PIN 53  // direction 1
 #define IN2_PIN 52  //  direction 2
 
+#define DDRB_ADDR 0x24
+#define DDRH_ADDR 0x101
+#define DDRE_ADDR 0x2D
+#define DDRG_ADDR 0x33
+#define DDRJ_ADDR 0x107
+#define DDRD_ADDR 0x2A
+
 RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Thursday", "Friday", "Saturday"};
 
@@ -79,8 +86,38 @@ void startSystem() {
   }
 }
 
-unsigned ddr_pin_numbers = [13, 12, 11, 10];
-ddrb_addresses = [];
+unsigned pinNumberToBitNumber(unsigned pinNumber) {
+  switch(pinNumber) {
+    case 13:
+      return 7;
+    case 12:
+      return 6;
+    case 11:
+      return 5;
+    case 10:
+      return 4;
+    case 9:
+      return 6;
+    case 8:
+      return 5;
+    case 7:
+      return 4;
+    case 6:
+      return 3;
+    case 5:
+      return 3;
+    case 4:
+      return 5;
+    case 3:
+      return 5;
+    case 2:
+      return 4;
+    case 1:
+      return 7;
+    case 0:
+      return 0;
+  }
+}
 
 unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
   switch (pinNumber) {
@@ -90,14 +127,16 @@ unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
     case 12:
     case 11:
     case 10:
-      return 0x24;
+      return DDRB_ADDR;
     
     // DDRH
     case 9:
     case 8:
     case 7:
     case 6:
-      return 0x101;
+    case 16:
+    case 17:
+      return DDRH_ADDR;
     
     // DDRE
     case 5:
@@ -105,11 +144,26 @@ unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
     case 2:
     case 1:
     case 0:
-      return 0x2D;
+      return DDRE_ADDR;
 
     // DDRG
+    case 4:
+    case 39:
+    case 40:
+    case 41:
+      return DDRG_ADDR;
 
+    // DDRJ
+    case 14:
+    case 15:
+      return DDRJ_ADDR;
 
+    // DDRD
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+      return DDRD_ADDR;
   }
 }
 
