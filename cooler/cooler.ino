@@ -1,6 +1,7 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
 #include <Stepper.h>
+#include <RTClib.h>
 #define GREEN_LED 24
 #define YELLOW_LED 22
 #define BLUE_LED 26
@@ -57,6 +58,17 @@ void U0putchar(unsigned char U0pdata) {
   while(!(*myUCSR0A & TBE));
   *myUDR0 = U0pdata;
 }
+
+#define DDRB_ADDR 0x24
+#define DDRH_ADDR 0x101
+#define DDRE_ADDR 0x2D
+#define DDRG_ADDR 0x33
+#define DDRJ_ADDR 0x107
+#define DDRD_ADDR 0x2A
+#define DDRA_ADDR 0x21
+
+RTC_DS3231 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Thursday", "Friday", "Saturday"};
 
 const int stepsPerRevolution = 2038;
 Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N3, STEPPER_1N2, STEPPER_1N4);
@@ -311,6 +323,125 @@ void startSystem() {
   }
 }
 
+unsigned pinNumberToBitNumber(unsigned pinNumber) {
+  switch(pinNumber) {
+    case 13:
+      return 7;
+    case 12:
+      return 6;
+    case 11:
+      return 5;
+    case 10:
+      return 4;
+    case 9:
+      return 6;
+    case 8:
+      return 5;
+    case 7:
+      return 4;
+    case 6:
+      return 3;
+    case 5:
+      return 3;
+    case 4:
+      return 5;
+    case 3:
+      return 5;
+    case 2:
+      return 4;
+    case 1:
+      return 7;
+    case 0:
+      return 0;
+    case 22:
+      return 0;
+    case 23:
+      return 1;
+    case 24:
+      return 2;
+    case 25:
+      return 3;
+    case 26:
+      return 4;
+    case 27:
+      return 5;
+    case 28:
+      return 6;
+    case 29:
+      return 7;
+  }
+}
+
+unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
+  switch (pinNumber) {
+
+    // DDRB
+    case 13:
+    case 12:
+    case 11:
+    case 10:
+      return DDRB_ADDR;
+    
+    // DDRH
+    case 9:
+    case 8:
+    case 7:
+    case 6:
+    case 16:
+    case 17:
+      return DDRH_ADDR;
+    
+    // DDRE
+    case 5:
+    case 3:
+    case 2:
+    case 1:
+    case 0:
+      return DDRE_ADDR;
+
+    // DDRG
+    case 4:
+    case 39:
+    case 40:
+    case 41:
+      return DDRG_ADDR;
+
+    // DDRJ
+    case 14:
+    case 15:
+      return DDRJ_ADDR;
+
+    // DDRD
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+      return DDRD_ADDR;
+
+    // DDRA
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+      return DDRA_ADDR;
+  }
+}
+
+void myPinMode(uint8_t pinNumber, uint8_t mode) {
+  volatile uint8_t* myDdrRegister = pinNumberToDdrAddress(pinNumber);
+  uint8_t myBitNumber = pinNumberToBitNumber(pinNumber);
+
+  if (mode == OUTPUT) {
+    *myDdrRegister |= (1 << myBitNumber);
+  } else if (mode == INPUT) {
+    *myDdrRegister &= ~(1 << myBitNumber);
+  }
+}
+
 void setup() {
 
   myUARTBegin(9600);
@@ -318,15 +449,16 @@ void setup() {
   // Test Code
   myUARTPrint("Print function works");
   U0putchar('\n');
+  rtc.begin();
 
   state = 'd';
   previousState = ' ';
 
   // put your setup code here, to run once:
-  pinMode(GREEN_LED, OUTPUT);
-  pinMode(RED_LED, OUTPUT);
-  pinMode(YELLOW_LED, OUTPUT);
-  pinMode(BLUE_LED, OUTPUT);
+  myPinMode(GREEN_LED, OUTPUT);
+  myPinMode(RED_LED, OUTPUT);
+  myPinMode(YELLOW_LED, OUTPUT);
+  myPinMode(BLUE_LED, OUTPUT);
 
   pinMode(START, INPUT_PULLUP);
   pinMode(RESET, INPUT_PULLUP);
@@ -336,12 +468,12 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
 
-  pinMode(DHTPIN, INPUT);
-  pinMode(WATER_SENSOR_PIN, INPUT);
+  myPinMode(DHTPIN, INPUT);
+  myPinMode(WATER_SENSOR_PIN, INPUT);
   
-  pinMode(ENA_PIN, OUTPUT);
-  pinMode(IN1_PIN, OUTPUT);
-  pinMode(IN2_PIN, OUTPUT);
+  myPinMode(ENA_PIN, OUTPUT);
+  myPinMode(IN1_PIN, OUTPUT);
+  myPinMode(IN2_PIN, OUTPUT);
 
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
@@ -350,20 +482,38 @@ void setup() {
   lcd.print("Cooling System");
 
   // Test Code //
+
   // stepper.setSpeed(10);
   // stepper.step(stepsPerRevolution);
 
-  motorStart(254);
+  // motorStart(254);
+
+  DateTime now = rtc.now();
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" (");
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(") ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.print(now.second(), DEC);
+  Serial.println();
+
+  // delay(3000);
+
   // Test Code //
 
 }
 
 void loop() {
   
-  // Test code //
   int testValue = analogRead(WATER_SENSOR_PIN);
   //Serial.println(testValue);
-  // Test code //
 
 
   if (previousState != state) {
