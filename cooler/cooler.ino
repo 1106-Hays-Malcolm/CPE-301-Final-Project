@@ -25,6 +25,26 @@
 #define ENA_PIN 8  //  motor speed (PWM control)   all of this are form the link from modules
 #define IN1_PIN 53  // direction 1
 #define IN2_PIN 52  //  direction 2
+#define RDA 0x80
+#define TBE 0x20
+
+volatile unsigned char *myUCSR0A = (unsigned char *)0x00C0;
+volatile unsigned char *myUCSR0B = (unsigned char *)0x00C1;
+volatile unsigned char *myUCSR0C = (unsigned char *)0x00C2;
+volatile unsigned int  *myUBRR0  = (unsigned int *) 0x00C4;
+volatile unsigned char *myUDR0   = (unsigned char *)0x00C6;
+
+void myUARTBegin(unsigned long U0baud)
+{
+  unsigned long FCPU = 16000000;
+  unsigned int tbaud;
+  tbaud = (FCPU / 16 / U0baud - 1);
+  // Same as (FCPU / (16 * U0baud)) - 1;
+  *myUCSR0A = 0x20;
+  *myUCSR0B = 0x18;
+  *myUCSR0C = 0x06;
+  *myUBRR0  = tbaud;
+}
 
 const int stepsPerRevolution = 2038;
 Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N3, STEPPER_1N2, STEPPER_1N4);
@@ -77,7 +97,8 @@ void startSystem() {
 
 void setup() {
 
-  Serial.begin(9600);
+  myUARTBegin(9600);
+  //Serial.begin(9600);
 
   state = 'd';
   previousState = ' ';
