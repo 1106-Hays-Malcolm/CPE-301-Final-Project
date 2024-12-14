@@ -1,6 +1,7 @@
 #include <dht.h>
 #include <LiquidCrystal.h>
 #include <Stepper.h>
+#include <RTClib.h>
 #define GREEN_LED 24
 #define YELLOW_LED 22
 #define BLUE_LED 26
@@ -25,6 +26,9 @@
 #define ENA_PIN 8  //  motor speed (PWM control)   all of this are form the link from modules
 #define IN1_PIN 53  // direction 1
 #define IN2_PIN 52  //  direction 2
+
+RTC_DS3231 rtc;
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Thursday", "Friday", "Saturday"};
 
 const int stepsPerRevolution = 2038;
 Stepper stepper = Stepper(stepsPerRevolution, STEPPER_1N1, STEPPER_1N3, STEPPER_1N2, STEPPER_1N4);
@@ -78,6 +82,7 @@ void startSystem() {
 void setup() {
 
   Serial.begin(9600);
+  rtc.begin();
 
   state = 'd';
   previousState = ' ';
@@ -110,10 +115,30 @@ void setup() {
   lcd.print("Cooling System");
 
   // Test Code //
+
   // stepper.setSpeed(10);
   // stepper.step(stepsPerRevolution);
 
-  motorStart(254);
+  // motorStart(254);
+
+  DateTime now = rtc.now();
+  Serial.print(now.year(), DEC);
+  Serial.print('/');
+  Serial.print(now.month(), DEC);
+  Serial.print('/');
+  Serial.print(now.day(), DEC);
+  Serial.print(" (");
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(") ");
+  Serial.print(now.hour(), DEC);
+  Serial.print(':');
+  Serial.print(now.minute(), DEC);
+  Serial.print(':');
+  Serial.print(now.second(), DEC);
+  Serial.println();
+
+  delay(3000);
+
   // Test Code //
 
 }
@@ -121,8 +146,8 @@ void setup() {
 void loop() {
   
   // Test code //
-  int testValue = analogRead(WATER_SENSOR_PIN);
-  Serial.println(testValue);
+  // int testValue = analogRead(WATER_SENSOR_PIN);
+  // Serial.println(testValue);
   // Test code //
 
 
