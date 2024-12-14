@@ -34,8 +34,7 @@ volatile unsigned char *myUCSR0C = (unsigned char *)0x00C2;
 volatile unsigned int  *myUBRR0  = (unsigned int *) 0x00C4;
 volatile unsigned char *myUDR0   = (unsigned char *)0x00C6;
 
-void myUARTBegin(unsigned long U0baud)
-{
+void myUARTBegin(unsigned long U0baud)  {
   unsigned long FCPU = 16000000;
   unsigned int tbaud;
   tbaud = (FCPU / 16 / U0baud - 1);
@@ -44,6 +43,19 @@ void myUARTBegin(unsigned long U0baud)
   *myUCSR0B = 0x18;
   *myUCSR0C = 0x06;
   *myUBRR0  = tbaud;
+}
+
+void myUARTPrint(char* printedString) {
+  int i = 0;
+  while(printedString[i] != '\0') {
+    U0putchar((printedString[i]);
+    i++;
+  }
+}
+
+void U0putchar(unsigned char U0pdata) {
+  while(!(*myUCSR0A & TBE));
+  *myUDR0 = U0pdata;
 }
 
 const int stepsPerRevolution = 2038;
@@ -99,6 +111,9 @@ void setup() {
 
   myUARTBegin(9600);
   //Serial.begin(9600);
+  // Test Code
+  myUARTPrint("Print function works");
+  U0putchar('\n');
 
   state = 'd';
   previousState = ' ';
@@ -143,7 +158,7 @@ void loop() {
   
   // Test code //
   int testValue = analogRead(WATER_SENSOR_PIN);
-  Serial.println(testValue);
+  //Serial.println(testValue);
   // Test code //
 
 
@@ -179,13 +194,13 @@ void loop() {
 
      // https://www.circuitbasics.com/how-to-set-up-the-dht11-humidity-sensor-on-an-arduino/
     }
-    Serial.print("Temperature: ");
+    /*Serial.print("Temperature: ");
     Serial.print(temperature);
     Serial.println("°C");
 
     Serial.print("Humidity: ");
     Serial.print(humidity);
-    Serial.println("%");
+    Serial.println("%");*/
 
     if (state == 'r' && temperature < LOWTEMP) {
       state = 'i'; 
