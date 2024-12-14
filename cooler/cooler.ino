@@ -227,12 +227,12 @@ if (pin == 0) {                // Pin D0
 
 } else if (pin >= A0 && pin <= A7) { // A0–A7 (PORTF)
     port = &PORTF;
-    bit = pin - 14; // PF0–PF7
+    bit = pin - A0; // PF0–PF7
 
 
   } else if (pin >= A8 && pin <= A15) { // A8–A15 (PORTK)
     port = &PORTK;
-    bit = pin - 22; // PK0–PK7
+    bit = pin - A8; // PK0–PK7
 
 
   } else {
@@ -248,7 +248,7 @@ if (pin == 0) {                // Pin D0
 
 void motorStart(int speed) {
   myDigitalWrite(IN1_PIN, HIGH);  
-  mydigitalWrite(IN2_PIN, LOW);   
+  myDigitalWrite(IN2_PIN, LOW);   
   analogWrite(ENA_PIN, speed);  
 }
 
