@@ -42,6 +42,217 @@ void start_button_ISR() {
   state = 'i';
 }
 
+void myDigitalWrite(uint8_t pin, bool value) {
+  volatile uint8_t* port;
+  uint8_t bit;
+
+
+if (pin == 0) {                // Pin D0
+    port = &PORTE;
+    bit = 0;                   // PE0
+} else if (pin == 1) {         // Pin D1
+    port = &PORTE;
+    bit = 1;                   // PE1
+} else if (pin == 2) {         // Pin D2
+    port = &PORTE;
+    bit = 4;                   // PE4
+} else if (pin == 3) {         // Pin D3
+    port = &PORTE;
+    bit = 5;                   // PE5
+} else if (pin == 4) {         // Pin D4
+    port = &PORTG;
+    bit = 5;                   // PG5
+} else if (pin == 5) {         // Pin D5
+    port = &PORTE;
+    bit = 3;                   // PE3
+} else if (pin == 6) {         // Pin D6
+    port = &PORTH;
+    bit = 3;                   // PH3
+} else if (pin == 7) {         // Pin D7
+    port = &PORTH;
+    bit = 4;                   // PH4
+}
+
+  } else if (pin == 8) {              // Pin D8 (PORTH)
+    port = &PORTH;
+    bit = 5; // PH5
+
+
+  } else if (pin == 9) {              // Pin D9 (PORTH)
+    port = &PORTH;
+    bit = 6; // PH6
+
+
+  } else if (pin >= 10 && pin <= 13) { // Pins 10–13 (PORTB)
+    port = &PORTB;
+    bit = pin - 6; // PB4–PB7
+
+
+
+
+if (pin == 14) {                // D14/TX3
+    port = &PORTJ;
+    bit = 1;                    // PJ1
+
+    
+} else if (pin == 15) {         // D15/RX3
+    port = &PORTJ;
+    bit = 0;                    // PJ0
+
+
+} else if (pin == 16) {         // D16/TX2
+    port = &PORTH;
+    bit = 1;                    // PH1
+
+
+} else if (pin == 17) {         // D17/RX2
+    port = &PORTH;
+    bit = 0;                    // PH0
+
+
+} else if (pin == 18) {         // D18/TX1
+    port = &PORTD;
+    bit = 3;                    // PD3
+
+
+} else if (pin == 19) {         // D19/RX1
+    port = &PORTD;
+    bit = 2;                    // PD2
+
+
+} else if (pin == 20) {         // D20/SDA
+    port = &PORTD;
+    bit = 1;                    // PD1
+
+
+} else if (pin == 21) {         // D21/SCL
+    port = &PORTD;
+    bit = 0;                    // PD0
+}
+
+
+  } else if (pin >= 22 && pin <= 29) { // Pins 22–29 (PORTA)
+    port = &PORTA;
+    bit = pin - 22; // PA0–PA7
+
+
+if (pin == 30) {                // Pin D30
+    port = &PORTC;
+    bit = 7;                    // PC7
+
+} else if (pin == 31) {         // Pin D31
+    port = &PORTC;
+    bit = 6;                    // PC6
+
+} else if (pin == 32) {         // Pin D32
+    port = &PORTC;
+    bit = 5;                    // PC5
+
+} else if (pin == 33) {         // Pin D33
+    port = &PORTC;
+    bit = 4;                    // PC4
+
+} else if (pin == 34) {         // Pin D34
+    port = &PORTC;
+    bit = 3;                    // PC3
+
+} else if (pin == 35) {         // Pin D35
+    port = &PORTC;
+    bit = 2;                    // PC2
+
+} else if (pin == 36) {         // Pin D36
+    port = &PORTC;
+    bit = 1;                    // PC1
+
+} else if (pin == 37) {         // Pin D37
+    port = &PORTC;
+    bit = 0;                    // PC0
+
+} else if (pin == 38) {         // Pin D38
+    port = &PORTD;
+    bit = 7;                    // PD7
+
+} else if (pin == 39) {         // Pin D39
+    port = &PORTG;
+    bit = 2;                    // PG2
+
+} else if (pin == 40) {         // Pin D40
+    port = &PORTG;
+    bit = 1;                    // PG1
+
+} else if (pin == 41) {         // Pin D41
+    port = &PORTG;
+    bit = 0;                    // PG0
+
+} else if (pin == 42) {         // Pin D42
+    port = &PORTL;
+    bit = 7;                    // PL7
+
+} else if (pin == 43) {         // Pin D43
+    port = &PORTL;
+    bit = 6;                    // PL6
+
+} else if (pin == 44) {         // Pin D44
+    port = &PORTL;
+    bit = 5;                    // PL5
+
+} else if (pin == 45) {         // Pin D45
+    port = &PORTL;
+    bit = 4;                    // PL4
+
+} else if (pin == 46) {         // Pin D46
+    port = &PORTL;
+    bit = 3;                    // PL3
+
+} else if (pin == 47) {         // Pin D47
+    port = &PORTL;
+    bit = 2;                    // PL2
+
+} else if (pin == 48) {         // Pin D48
+    port = &PORTL;
+    bit = 1;                    // PL1
+
+} else if (pin == 49) {         // Pin D49
+    port = &PORTL;
+    bit = 0;                    // PL0
+
+} else if (pin == 50) {         // Pin D50
+    port = &PORTB;
+    bit = 3;                    // PB3
+
+} else if (pin == 51) {         // Pin D51
+    port = &PORTB;
+    bit = 2;                    // PB2
+
+} else if (pin == 52) {         // Pin D52
+    port = &PORTB;
+    bit = 1;                    // PB1
+
+} else if (pin == 53) {         // Pin D53
+    port = &PORTB;
+    bit = 0;                    // PB0
+
+} else if (pin >= A0 && pin <= A7) { // A0–A7 (PORTF)
+    port = &PORTF;
+    bit = pin - 14; // PF0–PF7
+
+
+  } else if (pin >= A8 && pin <= A15) { // A8–A15 (PORTK)
+    port = &PORTK;
+    bit = pin - 22; // PK0–PK7
+
+
+  } else {
+    return; 
+  }
+
+  if (value) {
+    *port |= (1 << bit); 
+  } else {
+    *port &= ~(1 << bit); 
+  }
+}
+
 void motorStart(int speed) {
   digitalWrite(IN1_PIN, HIGH);  
   digitalWrite(IN2_PIN, LOW);   
@@ -181,3 +392,4 @@ void loop() {
     lcd.print(humidity);*/
   }
 }
+
