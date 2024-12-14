@@ -116,6 +116,22 @@ unsigned pinNumberToBitNumber(unsigned pinNumber) {
       return 7;
     case 0:
       return 0;
+    case 22:
+      return 0;
+    case 23:
+      return 1;
+    case 24:
+      return 2;
+    case 25:
+      return 3;
+    case 26:
+      return 4;
+    case 27:
+      return 5;
+    case 28:
+      return 6;
+    case 29:
+      return 7;
   }
 }
 
