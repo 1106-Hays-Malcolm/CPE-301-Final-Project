@@ -33,6 +33,7 @@
 #define DDRG_ADDR 0x33
 #define DDRJ_ADDR 0x107
 #define DDRD_ADDR 0x2A
+#define DDRA_ADDR 0x21
 
 RTC_DS3231 rtc;
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Thursday", "Friday", "Saturday"};
@@ -135,7 +136,7 @@ unsigned pinNumberToBitNumber(unsigned pinNumber) {
   }
 }
 
-unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
+unsigned char pinNumberToDdrAddress(unsigned pinNumber) {
   switch (pinNumber) {
 
     // DDRB
@@ -180,11 +181,29 @@ unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
     case 20:
     case 21:
       return DDRD_ADDR;
+
+    // DDRA
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+      return DDRA_ADDR;
   }
 }
 
-void myPinMode(unsigned pinNumber, unsigned mode) {
+void myPinMode(uint8_t pinNumber, uint8_t mode) {
+  volatile unsigned char myDdrRegister = pinNumberToDdrAddress(pinNumber);
+  unsigned myBitNumber = pinNumberToBitNumber(pinNumber);
 
+  if (mode == OUTPUT) {
+    *myDdrRegister |= (0x01 << myBitNumber);
+  } else if (mode == INPUT) {
+    *myDdrRegister &= !(0x01 << myBitNumber);
+  }
 }
 
 void setup() {
