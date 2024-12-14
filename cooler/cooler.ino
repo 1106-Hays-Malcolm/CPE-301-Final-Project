@@ -136,7 +136,7 @@ unsigned pinNumberToBitNumber(unsigned pinNumber) {
   }
 }
 
-unsigned char pinNumberToDdrAddress(unsigned pinNumber) {
+unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
   switch (pinNumber) {
 
     // DDRB
@@ -196,13 +196,13 @@ unsigned char pinNumberToDdrAddress(unsigned pinNumber) {
 }
 
 void myPinMode(uint8_t pinNumber, uint8_t mode) {
-  volatile unsigned char myDdrRegister = pinNumberToDdrAddress(pinNumber);
-  unsigned myBitNumber = pinNumberToBitNumber(pinNumber);
+  volatile uint8_t* myDdrRegister = pinNumberToDdrAddress(pinNumber);
+  uint8_t myBitNumber = pinNumberToBitNumber(pinNumber);
 
   if (mode == OUTPUT) {
-    *myDdrRegister |= (0x01 << myBitNumber);
+    *myDdrRegister |= (1 << myBitNumber);
   } else if (mode == INPUT) {
-    *myDdrRegister &= !(0x01 << myBitNumber);
+    *myDdrRegister &= ~(1 << myBitNumber);
   }
 }
 
@@ -215,10 +215,10 @@ void setup() {
   previousState = ' ';
 
   // put your setup code here, to run once:
-  pinMode(GREEN_LED, OUTPUT);
-  pinMode(RED_LED, OUTPUT);
-  pinMode(YELLOW_LED, OUTPUT);
-  pinMode(BLUE_LED, OUTPUT);
+  myPinMode(GREEN_LED, OUTPUT);
+  myPinMode(RED_LED, OUTPUT);
+  myPinMode(YELLOW_LED, OUTPUT);
+  myPinMode(BLUE_LED, OUTPUT);
 
   pinMode(START, INPUT_PULLUP);
   pinMode(RESET, INPUT_PULLUP);
@@ -228,12 +228,12 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
 
-  pinMode(DHTPIN, INPUT);
-  pinMode(WATER_SENSOR_PIN, INPUT);
+  myPinMode(DHTPIN, INPUT);
+  myPinMode(WATER_SENSOR_PIN, INPUT);
   
-  pinMode(ENA_PIN, OUTPUT);
-  pinMode(IN1_PIN, OUTPUT);
-  pinMode(IN2_PIN, OUTPUT);
+  myPinMode(ENA_PIN, OUTPUT);
+  myPinMode(IN1_PIN, OUTPUT);
+  myPinMode(IN2_PIN, OUTPUT);
 
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
@@ -264,7 +264,7 @@ void setup() {
   Serial.print(now.second(), DEC);
   Serial.println();
 
-  delay(3000);
+  // delay(3000);
 
   // Test Code //
 
