@@ -48,7 +48,7 @@ void myUARTBegin(unsigned long U0baud)  {
 void myUARTPrint(char* printedString) {
   int i = 0;
   while(printedString[i] != '\0') {
-    U0putchar((printedString[i]);
+    U0putchar(printedString[i]);
     i++;
   }
 }
