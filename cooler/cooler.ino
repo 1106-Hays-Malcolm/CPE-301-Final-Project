@@ -247,8 +247,8 @@ if (pin == 0) {                // Pin D0
 }
 
 void motorStart(int speed) {
-  digitalWrite(IN1_PIN, HIGH);  
-  digitalWrite(IN2_PIN, LOW);   
+  myDigitalWrite(IN1_PIN, HIGH);  
+  mydigitalWrite(IN2_PIN, LOW);   
   analogWrite(ENA_PIN, speed);  
 }
 
@@ -267,10 +267,10 @@ void stop_button_ISR() {
 }
 
 void leds_off() {
-  digitalWrite(GREEN_LED, LOW);
-  digitalWrite(YELLOW_LED, LOW);
-  digitalWrite(RED_LED, LOW);
-  digitalWrite(BLUE_LED, LOW);
+  myDigitalWrite(GREEN_LED, LOW);
+  myDigitalWrite(YELLOW_LED, LOW);
+  myDigitalWrite(RED_LED, LOW);
+  myDigitalWrite(BLUE_LED, LOW);
 }
 
 void startSystem() {
@@ -335,16 +335,16 @@ void loop() {
     previousState = state;
     switch(state) {
       case 'd':
-        digitalWrite(YELLOW_LED, HIGH);
+        myDigitalWrite(YELLOW_LED, HIGH);
         break;
       case 'r':
-        digitalWrite(BLUE_LED, HIGH);
+        myDigitalWrite(BLUE_LED, HIGH);
         break;
       case 'i':
-        digitalWrite(GREEN_LED, HIGH);
+        myDigitalWrite(GREEN_LED, HIGH);
         break;
       case 'e':
-        digitalWrite(RED_LED, HIGH);
+        myDigitalWrite(RED_LED, HIGH);
         break;
 
     }
