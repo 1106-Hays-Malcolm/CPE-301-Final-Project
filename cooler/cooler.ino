@@ -531,6 +531,9 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
   }
 }
 
+unsigned long previousMillis = 0;
+const long lcdInterval = 60000; 
+
 void setup() {
   adc_init();
   myUARTBegin(9600);
@@ -625,12 +628,24 @@ void loop() {
     }
   }
 
-  if (state != 'd') {  
+  if (state != 'd' && state != 'e') {  
     int chk = DHT.read11(DHTPIN);
 
     float temperature = DHT.temperature;  // this should be in celsius
     float humidity = DHT.humidity;  // this reads humidity
     
+    unsigned long currentMillis = millis();
+    if(currentMillis - previousMillis >= lcdInterval) {
+      previousMillis = currentMillis;
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Temperature: ");
+      lcd.print(temperature);
+      lcd.setCursor(1, 0);
+      lcd.print("Humidity: ");
+      lcd.print(humidity);
+    }
+
     if (isnan(temperature) || isnan(humidity)) {
       Serial.println("dht is not reading right ");
       return;
