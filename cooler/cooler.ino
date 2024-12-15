@@ -614,6 +614,7 @@ void loop() {
         myDigitalWrite(YELLOW_LED, HIGH);
         break;
       case 'r':
+        motorStart(254);
         myDigitalWrite(BLUE_LED, HIGH);
         break;
       case 'i':
