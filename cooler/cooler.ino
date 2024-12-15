@@ -10,8 +10,8 @@
 #define RESET 3
 #define STOP 18
 #define DHTPIN A1 //water + hum sensor
-#define LOWTEMP 20
-#define HIGHTEMP 30
+#define LOWTEMP 10
+#define HIGHTEMP 15
 #define WATER_SENSOR_PIN A0
 #define RS 23
 #define EN 13
