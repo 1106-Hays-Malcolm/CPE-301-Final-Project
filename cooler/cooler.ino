@@ -28,6 +28,8 @@
 #define IN2_PIN 52  //  direction 2
 #define RDA 0x80
 #define TBE 0x20
+#define VENT_ADJUST_BUTTON 19
+#define VENT_MAX_POS 100
 
 volatile unsigned char *myUCSR0A = (unsigned char *)0x00C0;
 volatile unsigned char *myUCSR0B = (unsigned char *)0x00C1;
@@ -310,6 +312,12 @@ void stop_button_ISR() {
   state = 'd';
 }
 
+bool vent_state = 0;
+unsigned vent_position = 0;
+void vent_button_ISR() {
+  vent_state = !vent_state;
+}
+
 void leds_off() {
   myDigitalWrite(GREEN_LED, LOW);
   myDigitalWrite(YELLOW_LED, LOW);
@@ -483,10 +491,12 @@ void setup() {
   myPinMode(START, INPUT_PULLUP);
   myPinMode(RESET, INPUT_PULLUP);
   myPinMode(STOP, INPUT_PULLUP);
+  myPinMode(VENT_ADJUST_BUTTON, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(RESET), reset_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(STOP), stop_button_ISR, FALLING);
+  attachInterrupt(digitalPinToInterrupt(VENT_ADJUST_BUTTON), vent_button_ISR, FALLING);
 
   myPinMode(DHTPIN, INPUT);
   myPinMode(WATER_SENSOR_PIN, INPUT);
@@ -531,6 +541,12 @@ void setup() {
 }
 
 void loop() {
+
+  if (vent_state && vent_position < VENT_MAX_POS) {
+    motorStart(10);
+  } else if (!vent_state && vent_position > 0) {
+    motorStart(-10);
+  }
   
   int testValue = analogRead(WATER_SENSOR_PIN);
   //Serial.println(testValue);
