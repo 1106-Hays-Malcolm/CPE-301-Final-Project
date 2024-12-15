@@ -651,7 +651,7 @@ void loop() {
       previousMillis = currentMillis;
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Temperature: ");
+      lcd.print("Temp: ");
       lcd.print(temperature);
       lcd.setCursor(0, 1);
       lcd.print("Humidity: ");
