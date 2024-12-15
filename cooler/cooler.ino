@@ -93,7 +93,9 @@ dht DHT;
 // DHT dhDHTPIN, DHTTYPE;
 // dht dhDHTPIN, DHTTYPE;
 void start_button_ISR() {
-  state = 'i';
+  if (state != 'e') {
+    state = 'i';
+  }
 }
 
 
@@ -382,12 +384,11 @@ void stop_button_ISR() {
 }
 
 bool vent_state = 0;
+bool print_vent_message = 0;
 unsigned vent_position = 0;
 void vent_button_ISR() {
   vent_state = !vent_state;
-  myUARTPrint("Stepper Motor/Vent movement on ");
-  printTimeAndDate();
-  U0putchar('\n');
+  print_vent_message = 1;
 }
 
 void leds_off() {
@@ -631,14 +632,21 @@ void setup() {
 
 void loop() {
 
-  if (vent_state && vent_position < VENT_MAX_POS) {
+  if (vent_state && vent_position < VENT_MAX_POS && state != 'd') {
     stepper.setSpeed(10);
     stepper.step(10);
     vent_position += 10;
-  } else if (!vent_state && vent_position > 0) {
+  } else if (!vent_state && vent_position > 0 && state != 'd') {
     stepper.setSpeed(10);
     stepper.step(-10);
     vent_position -= 10;
+  }
+
+  if (print_vent_message && state != 'd') {
+    print_vent_message = 0;
+    myUARTPrint("Stepper Motor/Vent Movement on ");
+    printTimeAndDate();
+    U0putchar('\n');
   }
   
   unsigned water_sensor_value = adc_read(WATER_SENSOR_PIN);
@@ -686,7 +694,7 @@ void loop() {
         previousMillis = 0;
         myUARTPrint("State Transition to Error on ");
         printTimeAndDate();
-        U0putchar('\n')
+        U0putchar('\n');
         break;
 
     }
