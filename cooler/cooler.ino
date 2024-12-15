@@ -12,7 +12,7 @@
 #define DHTPIN A1 //water + hum sensor
 #define LOWTEMP 25
 #define HIGHTEMP 27
-#define WATER_SENSOR_PIN A0
+#define WATER_SENSOR_PIN 0 // Pin A0
 #define RS 23
 #define EN 13
 #define D4 4
@@ -385,7 +385,6 @@ bool vent_state = 0;
 unsigned vent_position = 0;
 void vent_button_ISR() {
   vent_state = !vent_state;
-  Serial.println(vent_state);
 }
 
 void leds_off() {
@@ -547,8 +546,6 @@ void setup() {
   
   myUARTBegin(9600);
   adc_init();
-  //Serial.begin(9600);
-  // Test Code
   myUARTPrint("Print function works");
   U0putchar('\n');
   rtc.begin();
@@ -608,10 +605,6 @@ void setup() {
   Serial.print(now.second(), DEC);
   Serial.println();
 
-  // delay(3000);
-
-  // Test Code //
-
 }
 
 void loop() {
@@ -626,8 +619,7 @@ void loop() {
     vent_position -= 10;
   }
   
-  unsigned testValue = adc_read(WATER_SENSOR_PIN);
-  //Serial.println(testValue);
+  unsigned water_sensor_value = adc_read(WATER_SENSOR_PIN);
 
 
   if (previousState != state) {
@@ -666,7 +658,12 @@ void loop() {
     }
   }
 
-  if (state != 'd' && state != 'e') {  
+  if (state != 'd' && state != 'e') {
+
+    if (water_sensor_value < 5) {
+      state = 'e';
+    }
+
     int chk = DHT.read11(DHTPIN);
 
     float temperature = DHT.temperature;  // this should be in celsius
@@ -684,32 +681,11 @@ void loop() {
       lcd.print(humidity);
     }
 
-    if (isnan(temperature) || isnan(humidity)) {
-      Serial.println("dht is not reading right ");
-      return;
-
-     // https://www.circuitbasics.com/how-to-set-up-the-dht11-humidity-sensor-on-an-arduino/
-    }
-    /*Serial.print("Temperature: ");
-    Serial.print(temperature);
-    Serial.println("°C");
-
-    Serial.print("Humidity: ");
-    Serial.print(humidity);
-    Serial.println("%");*/
 
     if (state == 'r' && temperature < LOWTEMP) {
       state = 'i'; 
     } else if (state == 'i' && temperature > HIGHTEMP) {
       state = 'r';
     }
-
-    /*lcd.setCursor(0, 0);
-    lcd.print("Temperature: ");
-    lcd.print(temperature);
-    
-    lcd.setCursor(0, 1);
-    lcd.print("Humidity: ");
-    lcd.print(humidity);*/
   }
 }
