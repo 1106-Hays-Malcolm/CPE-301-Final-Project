@@ -532,8 +532,9 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
 }
 
 void setup() {
-  adc_init();
+  
   myUARTBegin(9600);
+  adc_init();
   //Serial.begin(9600);
   // Test Code
   myUARTPrint("Print function works");
