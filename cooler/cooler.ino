@@ -541,7 +541,28 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
 
 void printTimeAndDate() {
   DateTime now = rtc.now();
+  char dateString[100];
   int y = now.year();
+  int mon = now.month();
+  int d = now.day();
+  int h = now.hour();
+  int min = now.minute();
+  int s = now.second();
+  int i = 3;
+  while(y > 0) {
+    dateString[i] = (y % 10) + 48;
+    y = y / 10;
+    i--;
+  }
+  dateString[4] = '/';
+  dateString[5] = (mon / 10) + 48;
+  dateString[6] = (mon % 10) + 48;
+  dateString[7] = '/';
+  dateString[8] = (day / 10) + 48;
+  dateString[9] = (day % 10) + 48;
+  dateString[10] = ' ';
+  dateString[11] = '/0';
+  myUARTPrint(dateString);
   /*Serial.print(now.year(), DEC);
   Serial.print('/');
   Serial.print(now.month(), DEC);
@@ -562,8 +583,11 @@ unsigned long previousMillis = 0;
 const long lcdInterval = 5000; 
 
 void setup() {
-  
   myUARTBegin(9600);
+
+  //Test Code
+  printTimeAndDate();
+
   adc_init();
   myUARTPrint("Print function works");
   U0putchar('\n');
