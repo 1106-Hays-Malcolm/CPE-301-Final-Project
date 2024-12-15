@@ -532,7 +532,7 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
 }
 
 void setup() {
-
+  adc_init();
   myUARTBegin(9600);
   //Serial.begin(9600);
   // Test Code
@@ -600,8 +600,8 @@ void setup() {
 }
 
 void loop() {
-  adc_init();
-  int testValue = adc_read(WATER_SENSOR_PIN);
+  
+  unsigned testValue = adc_read(WATER_SENSOR_PIN);
   //Serial.println(testValue);
 
 
