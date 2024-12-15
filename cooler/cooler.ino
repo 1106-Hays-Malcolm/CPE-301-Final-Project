@@ -532,7 +532,7 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
 }
 
 unsigned long previousMillis = 0;
-const long lcdInterval = 60000; 
+const long lcdInterval = 5000; 
 
 void setup() {
   adc_init();
@@ -614,6 +614,12 @@ void loop() {
     switch(state) {
       case 'd':
         myDigitalWrite(YELLOW_LED, HIGH);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Evaporation");
+        lcd.setCursor(0, 1);
+        lcd.print("Cooling System");
+        previousMillis = 0;
         break;
       case 'r':
         myDigitalWrite(BLUE_LED, HIGH);
@@ -623,6 +629,12 @@ void loop() {
         break;
       case 'e':
         myDigitalWrite(RED_LED, HIGH);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Error! Water");
+        lcd.setCursor(0, 1);
+        lcd.print("level is too low");
+        previousMillis = 0;
         break;
 
     }
@@ -635,13 +647,13 @@ void loop() {
     float humidity = DHT.humidity;  // this reads humidity
     
     unsigned long currentMillis = millis();
-    if(currentMillis - previousMillis >= lcdInterval) {
+    if(currentMillis - previousMillis >= lcdInterval || previousMillis == 0) {
       previousMillis = currentMillis;
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Temperature: ");
       lcd.print(temperature);
-      lcd.setCursor(1, 0);
+      lcd.setCursor(0, 1);
       lcd.print("Humidity: ");
       lcd.print(humidity);
     }
