@@ -596,7 +596,7 @@ void setup() {
   Serial.print('/');
   Serial.print(now.day(), DEC);
   Serial.print(" (");
-  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
+  Serial.print(daysOfTheWeek[now.dayOfTheWeek() - 1]);
   Serial.print(") ");
   Serial.print(now.hour(), DEC);
   Serial.print(':');
