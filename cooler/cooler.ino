@@ -421,4 +421,3 @@ void loop() {
     lcd.print(humidity);*/
   }
 }
-
