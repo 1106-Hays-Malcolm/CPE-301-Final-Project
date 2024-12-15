@@ -86,6 +86,21 @@ void start_button_ISR() {
   state = 'i';
 }
 
+int myAnalogRead(uint8_t pin){
+  if (pin >= A0 && pin <= A15 ) {   
+    pin -= A0;  
+    } else {
+      return 0;
+    }
+    ADMUX = (1 << REFS0) | pin;
+    ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+    // this is to start
+    ADCSRA |= (1 << ADSC);
+    while (ADCSRA & (1 << ADSC));
+
+    return ADC;
+}
+
 void myDigitalWrite(uint8_t pin, bool value) {
   volatile uint8_t* port;
   uint8_t bit;
@@ -512,7 +527,7 @@ void setup() {
 
 void loop() {
   
-  int testValue = analogRead(WATER_SENSOR_PIN);
+  int testValue = myAnalogRead(WATER_SENSOR_PIN);
   //Serial.println(testValue);
 
 
