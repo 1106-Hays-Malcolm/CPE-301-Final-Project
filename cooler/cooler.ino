@@ -611,6 +611,7 @@ void loop() {
     previousState = state;
     switch(state) {
       case 'd':
+        motorStop():
         myDigitalWrite(YELLOW_LED, HIGH);
         break;
       case 'r':
@@ -618,9 +619,11 @@ void loop() {
         myDigitalWrite(BLUE_LED, HIGH);
         break;
       case 'i':
+        motorStop();
         myDigitalWrite(GREEN_LED, HIGH);
         break;
       case 'e':
+        motorStop();
         myDigitalWrite(RED_LED, HIGH);
         break;
 
