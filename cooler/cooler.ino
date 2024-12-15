@@ -613,6 +613,11 @@ void loop() {
     stepper.setSpeed(10);
     stepper.step(-10);
     vent_position -= 10;
+  } else {
+    myDigitalWrite(STEPPER_1N1, LOW);
+    myDigitalWrite(STEPPER_1N2, LOW);
+    myDigitalWrite(STEPPER_1N3, LOW);
+    myDigitalWrite(STEPPER_1N4, LOW);
   }
 
   if (print_vent_message && state != 'd') {
