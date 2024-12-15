@@ -353,6 +353,22 @@ unsigned pinNumberToBitNumber(unsigned pinNumber) {
       return 7;
     case 0:
       return 0;
+    case 14:
+      return 1;
+    case 15:
+      return 0;
+    case 16:
+      return 1;
+    case 17:
+      return 0;
+    case 18:
+      return 3;
+    case 19:
+      return 2;
+    case 20:
+      return 1;
+    case 21:
+      return 0;
     case 22:
       return 0;
     case 23:
@@ -433,12 +449,16 @@ unsigned char* pinNumberToDdrAddress(unsigned pinNumber) {
 
 void myPinMode(uint8_t pinNumber, uint8_t mode) {
   volatile uint8_t* myDdrRegister = pinNumberToDdrAddress(pinNumber);
+  volatile uint8_t* myPortRegister = (uint8_t)(pinNumberToDdrAddress(pinNumber) + 1);
   uint8_t myBitNumber = pinNumberToBitNumber(pinNumber);
 
   if (mode == OUTPUT) {
     *myDdrRegister |= (1 << myBitNumber);
   } else if (mode == INPUT) {
     *myDdrRegister &= ~(1 << myBitNumber);
+  } else if (mode == INPUT_PULLUP) {
+    *myDdrRegister &= ~(1 << myBitNumber);
+    *myPortRegister |= (1 << myBitNumber);
   }
 }
 
@@ -460,9 +480,9 @@ void setup() {
   myPinMode(YELLOW_LED, OUTPUT);
   myPinMode(BLUE_LED, OUTPUT);
 
-  pinMode(START, INPUT_PULLUP);
-  pinMode(RESET, INPUT_PULLUP);
-  pinMode(STOP, INPUT_PULLUP);
+  myPinMode(START, INPUT_PULLUP);
+  myPinMode(RESET, INPUT_PULLUP);
+  myPinMode(STOP, INPUT_PULLUP);
 
   attachInterrupt(digitalPinToInterrupt(RESET), reset_button_ISR, FALLING);
   attachInterrupt(digitalPinToInterrupt(START), start_button_ISR, FALLING);
