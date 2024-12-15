@@ -90,8 +90,6 @@ char previousState;
 LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
 
 dht DHT;
-// DHT dhDHTPIN, DHTTYPE;
-// dht dhDHTPIN, DHTTYPE;
 void start_button_ISR() {
   if (state != 'e') {
     state = 'i';
@@ -142,22 +140,6 @@ unsigned int adc_read(unsigned char adc_channel_num)
   // return the result in the ADC data register
   return *my_ADC_DATA;
 }
-
-
-// int myAnalogRead(uint8_t pin){
-//   if (pin >= A0 && pin <= A15 ) {   
-//     pin -= A0;  
-//     } else {
-//       return 0;
-//     }
-//     ADMUX = (1 << REFS0) | pin;
-//     ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
-//     // this is to start
-//     ADCSRA |= (1 << ADSC);
-//     while (ADCSRA & (1 << ADSC));
-
-//     return ADC;
-// }
 
 void myDigitalWrite(uint8_t pin, bool value) {
   volatile uint8_t* port;
@@ -582,10 +564,8 @@ unsigned long previousMillis = 0;
 const long lcdInterval = 5000; 
 
 void setup() {
-  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   myUARTBegin(9600);
 
-  //Test Code
   rtc.begin();
 
   adc_init();
@@ -621,13 +601,6 @@ void setup() {
   lcd.print("Evaporation");
   lcd.setCursor(0, 1);
   lcd.print("Cooling System");
-
-  // Test Code //
-
-  // stepper.setSpeed(10);
-  // stepper.step(stepsPerRevolution);
-
-  // motorStart(254);
 }
 
 void loop() {
@@ -696,12 +669,10 @@ void loop() {
         printTimeAndDate();
         U0putchar('\n');
         break;
-
     }
   }
 
   if (state != 'd' && state != 'e') {
-
     if (water_sensor_value < 5) {
       state = 'e';
     }
@@ -722,7 +693,6 @@ void loop() {
       lcd.print("Humidity: ");
       lcd.print(humidity);
     }
-
 
     if (state == 'r' && temperature < LOWTEMP) {
       state = 'i'; 
