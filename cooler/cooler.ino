@@ -385,6 +385,9 @@ bool vent_state = 0;
 unsigned vent_position = 0;
 void vent_button_ISR() {
   vent_state = !vent_state;
+  myUARTPrint("Stepper Motor/Vent movement on ");
+  printTimeAndDate();
+  U0putchar('\n');
 }
 
 void leds_off() {
@@ -583,8 +586,6 @@ void setup() {
 
   //Test Code
   rtc.begin();
-  printTimeAndDate();
-  U0putchar('\n');
 
   adc_init();
 
@@ -656,14 +657,23 @@ void loop() {
         lcd.setCursor(0, 1);
         lcd.print("Cooling System");
         previousMillis = 0;
+        myUARTPrint("State Transition to Disabled on ");
+        printTimeAndDate();
+        U0putchar('\n');
         break;
       case 'r':
         motorStart(254);
         myDigitalWrite(BLUE_LED, HIGH);
+        myUARTPrint("State Transition to Running on ");
+        printTimeAndDate();
+        U0putchar('\n');
         break;
       case 'i':
         motorStop();
         myDigitalWrite(GREEN_LED, HIGH);
+        myUARTPrint("State Transition to Idle on ");
+        printTimeAndDate();
+        U0putchar('\n');
         break;
       case 'e':
         motorStop();
@@ -674,6 +684,9 @@ void loop() {
         lcd.setCursor(0, 1);
         lcd.print("level is too low");
         previousMillis = 0;
+        myUARTPrint("State Transition to Error on ");
+        printTimeAndDate();
+        U0putchar('\n')
         break;
 
     }
