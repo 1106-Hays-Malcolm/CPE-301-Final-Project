@@ -540,6 +540,9 @@ void myPinMode(uint8_t pinNumber, uint8_t mode) {
   }
 }
 
+unsigned long previousMillis = 0;
+const long lcdInterval = 5000; 
+
 void setup() {
   
   myUARTBegin(9600);
@@ -634,6 +637,12 @@ void loop() {
       case 'd':
         motorStop();
         myDigitalWrite(YELLOW_LED, HIGH);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Evaporation");
+        lcd.setCursor(0, 1);
+        lcd.print("Cooling System");
+        previousMillis = 0;
         break;
       case 'r':
         motorStart(254);
@@ -646,17 +655,35 @@ void loop() {
       case 'e':
         motorStop();
         myDigitalWrite(RED_LED, HIGH);
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Error! Water");
+        lcd.setCursor(0, 1);
+        lcd.print("level is too low");
+        previousMillis = 0;
         break;
 
     }
   }
 
-  if (state != 'd') {  
+  if (state != 'd' && state != 'e') {  
     int chk = DHT.read11(DHTPIN);
 
     float temperature = DHT.temperature;  // this should be in celsius
     float humidity = DHT.humidity;  // this reads humidity
     
+    unsigned long currentMillis = millis();
+    if(currentMillis - previousMillis >= lcdInterval || previousMillis == 0) {
+      previousMillis = currentMillis;
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Temp: ");
+      lcd.print(temperature);
+      lcd.setCursor(0, 1);
+      lcd.print("Humidity: ");
+      lcd.print(humidity);
+    }
+
     if (isnan(temperature) || isnan(humidity)) {
       Serial.println("dht is not reading right ");
       return;
