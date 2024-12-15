@@ -29,7 +29,7 @@
 #define RDA 0x80
 #define TBE 0x20
 #define VENT_ADJUST_BUTTON 19
-#define VENT_MAX_POS 100
+#define VENT_MAX_POS 500
 
 volatile unsigned char *myUCSR0A = (unsigned char *)0x00C0;
 volatile unsigned char *myUCSR0B = (unsigned char *)0x00C1;
@@ -316,6 +316,7 @@ bool vent_state = 0;
 unsigned vent_position = 0;
 void vent_button_ISR() {
   vent_state = !vent_state;
+  Serial.println(vent_state);
 }
 
 void leds_off() {
@@ -543,9 +544,13 @@ void setup() {
 void loop() {
 
   if (vent_state && vent_position < VENT_MAX_POS) {
-    motorStart(10);
+    stepper.setSpeed(10);
+    stepper.step(10);
+    vent_position += 10;
   } else if (!vent_state && vent_position > 0) {
-    motorStart(-10);
+    stepper.setSpeed(10);
+    stepper.step(-10);
+    vent_position -= 10;
   }
   
   int testValue = analogRead(WATER_SENSOR_PIN);
