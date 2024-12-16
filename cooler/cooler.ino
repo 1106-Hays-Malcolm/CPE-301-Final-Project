@@ -564,7 +564,7 @@ void printTimeAndDate() {
 }
 
 unsigned long previousMillis = 0;
-const long lcdInterval = 5000; 
+const long lcdInterval = 60000; //shows updates to humidity/temp every minute
 
 void setup() {
   myUARTBegin(9600);
