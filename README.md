@@ -2,7 +2,7 @@
 
 ## Group and Team Information
 - **Group Number:** 1 
-- **Group Members:** Aween Ali, Derek Ngu, Malcom Hays, Thomas Vasile
+- **Group Members:** Aween Ali, Malcom Hays, Derek Ngu, Thomas Vasile
 
 ## Files 
 - **README.md:** The READ ME file will contain the information needed to function and understand this project. 

@@ -1,3 +1,6 @@
+//Project: Water Evaporation Cooling System
+//Authors: Aween Ali, Malcolm Hays, Derek Ngu, Thomas Vasile
+
 #include <dht.h>
 #include <LiquidCrystal.h>
 #include <Stepper.h>
